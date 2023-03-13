@@ -10,7 +10,7 @@ import os
 from Crypto.Cipher import AES
 
 
-def dump(file_path):
+def dump(file_path, output_dir):
     #十六进制转字符串
     core_key = binascii.a2b_hex("687A4852416D736F356B496E62617857")
     meta_key = binascii.a2b_hex("2331346C6A6B5F215C5D2630553C2728")
@@ -61,8 +61,17 @@ def dump(file_path):
     image_size = f.read(4)
     image_size = struct.unpack('<I', bytes(image_size))[0]
     image_data = f.read(image_size)
-    file_name = f.name.split("/")[-1].split(".ncm")[0] + '.' + meta_data['format']
-    m = open(os.path.join(os.path.split(file_path)[0], file_name), 'wb')
+    # print(f.name)
+    file_name = f.name.split("\\")[-1].split(".ncm")[0]
+    file_name = file_name.split("/")[-1].split(".ncm")[0]
+    file_name = file_name + '.' + meta_data['format']
+    # if "\\" in f.name:
+    #     file_name = f.name.split("\\")[-1].split(".ncm")[0] + '.' + meta_data['format']
+    # else:
+    #     file_name = f.name.split("/")[-1].split(".ncm")[0] + '.' + meta_data['format']
+    # print(file_name)
+    output_file = output_dir + file_name
+    m = open(output_file, 'wb')
     chunk = bytearray()
     while True:
         chunk = bytearray(f.read(0x8000))
@@ -79,7 +88,8 @@ def dump(file_path):
 
 
 if __name__ == '__main__':
-    file_list = ['陈芳语 - 爱你.ncm', '李翊君 - 雨蝶.ncm']
-    for file in file_list:
-        filepath = "F:\CloudMusic\\"+file
-        dump(filepath)
+    pass
+    # file_list = ['陈芳语 - 爱你.ncm', '李翊君 - 雨蝶.ncm']
+    # for file in file_list:
+    #     filepath = "F:\CloudMusic\\"+file
+    #     dump(filepath)
